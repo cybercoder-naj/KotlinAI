@@ -57,6 +57,8 @@ class Matrix internal constructor() {
         return S
     }
 
+    operator fun unaryMinus() = -1 * this
+
     operator fun times(other: Double): Matrix {
         val S = Matrix(m, n)
 

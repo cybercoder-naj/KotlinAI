@@ -135,8 +135,8 @@ class MatrixTest {
 
         val C = A + B
 
-        assertTrue(A orderEqual  B)
-        assertTrue(B orderEqual  C)
+        assertTrue(A orderEqual B)
+        assertTrue(B orderEqual C)
         assertFalse(A orderNotEqual C)
     }
 
@@ -164,5 +164,54 @@ class MatrixTest {
         assertThrows<IllegalArgumentException> {
             X * A
         }
+    }
+
+    @Test
+    fun `find the transpose of matrix`() {
+        val A = matrix {
+            row(4)
+            row(-1)
+        }
+
+        val B = transpose(A)
+
+        val requiredB = matrix {
+            row(4, -1)
+        }
+
+        assertTrue(B == requiredB)
+
+        val C = matrix {
+            row(-2, 7)
+            row(3, -4)
+        }
+
+        val D = C.transpose()
+
+        val requiredD = matrix {
+            row(-2, 3)
+            row(7, -4)
+        }
+
+        assertTrue(D == requiredD)
+    }
+
+    @Test
+    fun `negating a matrix`() {
+        val A = matrix {
+            row(-2, 7, 9)
+            row(3, -4, 0)
+            row(0, 1, -8)
+        }
+
+        val B = -A
+
+        val requiredB = matrix {
+            row(2, -7, -9)
+            row(-3, 4, 0)
+            row(0, -1, 8)
+        }
+
+        assertTrue(B == requiredB)
     }
 }
