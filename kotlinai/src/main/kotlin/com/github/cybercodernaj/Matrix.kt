@@ -22,14 +22,7 @@ class Matrix internal constructor() {
     }
 
     fun row(vararg elements: Double): DoubleArray {
-        if (elements.isEmpty())
-            throw IllegalArgumentException("Cannot add empty row")
-
-        if (n == -1)
-            n = elements.size
-
-        if (elements.size != n)
-            throw IllegalArgumentException("Invalid matrix")
+        assertRowConditions(elements)
 
         val row = doubleArrayOf(*elements)
         rows.add(row)
@@ -37,14 +30,7 @@ class Matrix internal constructor() {
     }
 
     fun row(vararg elements: Int): DoubleArray {
-        if (elements.isEmpty())
-            throw IllegalArgumentException("Cannot add empty row")
-
-        if (n == -1)
-            n = elements.size
-
-        if (elements.size != n)
-            throw IllegalArgumentException("Invalid matrix")
+        assertRowConditions(elements.map { it.toDouble() }.toDoubleArray())
 
         val row = doubleArrayOf(*(elements.map { it.toDouble() }.toDoubleArray()))
         rows.add(row)
@@ -91,6 +77,17 @@ class Matrix internal constructor() {
     private fun assertEqualOrder(other: Matrix) {
         if (this orderNotEqual other)
             throw IllegalArgumentException("Cannot add matrices of different order")
+    }
+
+    private fun assertRowConditions(elements: DoubleArray) {
+        if (elements.isEmpty())
+            throw IllegalArgumentException("Cannot add empty row")
+
+        if (n == -1)
+            n = elements.size
+
+        if (elements.size != n)
+            throw IllegalArgumentException("Invalid matrix")
     }
 
     infix fun orderEqual(other: Matrix) =
