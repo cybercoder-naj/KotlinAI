@@ -92,6 +92,10 @@ class Matrix internal constructor() {
         return S
     }
 
+    fun isSymmetric() = this == transpose()
+
+    fun isSkewSymmetric() = this == -transpose()
+
     fun determinant(): Double {
         assertSquare()
 
@@ -104,6 +108,8 @@ class Matrix internal constructor() {
 
         return det
     }
+
+    fun isSingular() = determinant() == 0.0
 
     internal fun minor(A: Matrix, _i: Int, _j: Int): Matrix  {
         val S = Matrix(A.m - 1, A.n - 1)
