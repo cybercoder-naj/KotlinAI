@@ -139,4 +139,30 @@ class MatrixTest {
         assertTrue(B orderEqual  C)
         assertFalse(A orderNotEqual C)
     }
+
+    @Test
+    fun `multiply two matrices`() {
+        val A = matrix {
+            row(-2, 3)
+            row(3, -4)
+        }
+
+        val X = matrix {
+            row(4)
+            row(-1)
+        }
+
+        val B = A * X
+
+        val requiredB = matrix {
+            row(-11)
+            row(16)
+        }
+
+        assertTrue(B == requiredB)
+
+        assertThrows<IllegalArgumentException> {
+            X * A
+        }
+    }
 }

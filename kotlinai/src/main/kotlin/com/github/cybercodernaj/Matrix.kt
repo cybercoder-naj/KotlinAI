@@ -110,6 +110,18 @@ class Matrix internal constructor() {
 
     operator fun times(other: Int) = this * other.toDouble()
 
+    operator fun times(other: Matrix): Matrix {
+        if (this.n != other.m)
+            throw IllegalArgumentException("Cannot multiply matrices of incompatible order")
+
+        val S = Matrix(this.m, other.n)
+        S.forEachElement { i, j ->
+            for (k in 0 until n)
+                S[i][j] += this[i][k] * other[k][j]
+        }
+        return S
+    }
+
     private inline fun forEachElement(block: (i: Int, j: Int) -> Unit) {
         for (i in indices)
             for (j in rows[i].indices)
