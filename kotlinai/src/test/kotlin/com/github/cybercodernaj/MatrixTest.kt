@@ -64,4 +64,44 @@ class MatrixTest {
         }
         assertFalse(A == B)
     }
+
+    @Test
+    fun `add two matrices using plus`() {
+        val A = matrix {
+            row(8, -5)
+            row(3, -1)
+        }
+        val B = matrix {
+            row(4, 5)
+            row(0.3, -3.0)
+        }
+
+        val C = A + B
+
+        val requiredC = matrix {
+            row(12, 0)
+            row(3.3, -4.0)
+        }
+        assertTrue(C == requiredC)
+    }
+
+    @Test
+    fun `subtract two matrices using minus`() {
+        var A = matrix {
+            row(8, -5)
+            row(3, -1)
+        }
+        val B = matrix {
+            row(4, 5)
+            row(0.3, -3.0)
+        }
+
+        A -= B
+
+        val requiredA = matrix {
+            row(4, -10)
+            row(2.7, 2.0)
+        }
+        assertTrue(A == requiredA)
+    }
 }

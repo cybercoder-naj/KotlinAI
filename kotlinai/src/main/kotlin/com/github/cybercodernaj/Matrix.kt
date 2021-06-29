@@ -1,6 +1,6 @@
 package com.github.cybercodernaj
 
-class Matrix {
+class Matrix internal constructor() {
     internal val rows = arrayListOf<DoubleArray>()
 
     private val m: Int
@@ -10,6 +10,13 @@ class Matrix {
 
     private val indices: IntRange
         get() = 0 until rows.size
+
+    private constructor(m: Int, n: Int) : this() {
+        repeat(m) {
+            rows.add(DoubleArray(n))
+        }
+        this.n = n
+    }
 
     fun row(vararg elements: Double): DoubleArray {
         if (elements.isEmpty())
@@ -49,7 +56,7 @@ class Matrix {
             return false
 
         for (i in indices)
-            for(j in rows[i].indices)
+            for (j in rows[i].indices)
                 if (this[i][j] != other[i][j])
                     return false
 
@@ -57,6 +64,33 @@ class Matrix {
     }
 
     operator fun get(position: Int) = rows[position]
+
+    operator fun plus(other: Matrix): Matrix {
+        assertEqualOrder(other)
+
+        val S = Matrix(m, n)
+        for (i in indices) {
+            for (j in rows[i].indices)
+                S[i][j] = this[i][j] + other[i][j]
+        }
+        return S
+    }
+
+    operator fun minus(other: Matrix): Matrix {
+        assertEqualOrder(other)
+
+        val S = Matrix(m, n)
+        for (i in indices) {
+            for (j in rows[i].indices)
+                S[i][j] = this[i][j] - other[i][j]
+        }
+        return S
+    }
+
+    private fun assertEqualOrder(other: Matrix) {
+        if (this.m != other.m || this.n != other.n)
+            throw IllegalArgumentException("Cannot add matrices of different order")
+    }
 
     override fun hashCode(): Int {
         var result = rows.hashCode()
