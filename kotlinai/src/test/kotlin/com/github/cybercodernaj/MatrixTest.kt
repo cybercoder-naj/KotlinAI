@@ -66,7 +66,7 @@ class MatrixTest {
     }
 
     @Test
-    fun `add two matrices using plus`() {
+    fun `add two matrices`() {
         val A = matrix {
             row(8, -5)
             row(3, -1)
@@ -86,7 +86,7 @@ class MatrixTest {
     }
 
     @Test
-    fun `subtract two matrices using minus`() {
+    fun `subtract two matrices`() {
         var A = matrix {
             row(8, -5)
             row(3, -1)
@@ -103,5 +103,40 @@ class MatrixTest {
             row(2.7, 2.0)
         }
         assertTrue(A == requiredA)
+    }
+
+    @Test
+    fun `multiply matrix with scalar`() {
+        val A = matrix {
+            row(4, 5)
+            row(0.3, -3.0)
+        }
+
+        val B = 2 * A
+
+        val requiredB = matrix {
+            row(8, 10)
+            row(0.6, -6.0)
+        }
+
+        assertTrue(B == requiredB)
+    }
+
+    @Test
+    fun `matrix with same order returns true on order test`() {
+        val A = matrix {
+            row(8, -5)
+            row(3, -1)
+        }
+        val B = matrix {
+            row(4, 5)
+            row(0.3, -3.0)
+        }
+
+        val C = A + B
+
+        assertTrue(A orderEqual  B)
+        assertTrue(B orderEqual  C)
+        assertFalse(A orderNotEqual C)
     }
 }

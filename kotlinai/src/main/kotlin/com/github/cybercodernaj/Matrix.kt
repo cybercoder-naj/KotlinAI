@@ -1,5 +1,8 @@
 package com.github.cybercodernaj
 
+import kotlin.math.ceil
+import kotlin.math.floor
+
 class Matrix internal constructor() {
     internal val rows = arrayListOf<DoubleArray>()
 
@@ -55,10 +58,10 @@ class Matrix internal constructor() {
         if (this.m != other.m || this.n != other.n)
             return false
 
-        for (i in indices)
-            for (j in rows[i].indices)
-                if (this[i][j] != other[i][j])
-                    return false
+        forEachElement { i, j ->
+            if (this[i][j] != other[i][j])
+                return false
+        }
 
         return true
     }
@@ -69,9 +72,8 @@ class Matrix internal constructor() {
         assertEqualOrder(other)
 
         val S = Matrix(m, n)
-        for (i in indices) {
-            for (j in rows[i].indices)
-                S[i][j] = this[i][j] + other[i][j]
+        forEachElement { i, j ->
+            S[i][j] = this[i][j] + other[i][j]
         }
         return S
     }
@@ -80,16 +82,56 @@ class Matrix internal constructor() {
         assertEqualOrder(other)
 
         val S = Matrix(m, n)
-        for (i in indices) {
-            for (j in rows[i].indices)
-                S[i][j] = this[i][j] - other[i][j]
+        forEachElement { i, j ->
+            S[i][j] = this[i][j] - other[i][j]
         }
         return S
     }
 
     private fun assertEqualOrder(other: Matrix) {
-        if (this.m != other.m || this.n != other.n)
+        if (this orderNotEqual other)
             throw IllegalArgumentException("Cannot add matrices of different order")
+    }
+
+    infix fun orderEqual(other: Matrix) =
+        this.m == other.m && this.n == other.n
+
+    infix fun orderNotEqual(other: Matrix) =
+        !(this orderEqual other)
+
+    operator fun times(other: Double): Matrix {
+        val S = Matrix(m, n)
+
+        forEachElement { i, j ->
+            S[i][j] = other * this[i][j]
+        }
+        return S
+    }
+
+    operator fun times(other: Int) = this * other.toDouble()
+
+    private inline fun forEachElement(block: (i: Int, j: Int) -> Unit) {
+        for (i in indices)
+            for (j in rows[i].indices)
+                block(i, j)
+    }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        for (i in indices) {
+            for (j in rows[i].indices) {
+                val element = if (ceil(this[i][j]) == floor(this[i][j]))
+                    this[i][j].toInt()
+                else
+                    this[i][j]
+
+                sb.append(element)
+                if (j != n - 1)
+                    sb.append("\t")
+                else sb.append("\n")
+            }
+        }
+        return sb.toString()
     }
 
     override fun hashCode(): Int {
@@ -98,12 +140,4 @@ class Matrix internal constructor() {
         result = 31 * result + n
         return result
     }
-}
-
-fun matrix(init: Matrix.() -> Unit): Matrix {
-    val matrix = Matrix()
-    matrix.init()
-    if (matrix.rows.isEmpty())
-        throw IllegalArgumentException("Cannot instantiate empty matrix")
-    return matrix
 }
