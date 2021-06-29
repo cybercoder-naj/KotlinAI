@@ -10,6 +10,8 @@ fun matrix(init: Matrix.() -> Unit): Matrix {
     return matrix
 }
 
+fun transpose(A: Matrix) = A.transpose()
+
 operator fun Int.times(other: Matrix) = other * this
 
 operator fun Double.times(other: Matrix) = other * this

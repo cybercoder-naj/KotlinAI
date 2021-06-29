@@ -80,6 +80,15 @@ class Matrix internal constructor() {
         return S
     }
 
+    fun transpose(): Matrix {
+        val S = Matrix(n, m)
+
+        forEachElement { i, j ->
+            S[j][i] = this[i][j]
+        }
+        return S
+    }
+
     infix fun orderEqual(other: Matrix) =
         this.m == other.m && this.n == other.n
 
