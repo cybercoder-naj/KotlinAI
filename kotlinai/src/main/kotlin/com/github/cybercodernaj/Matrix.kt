@@ -2,6 +2,7 @@ package com.github.cybercodernaj
 
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.pow
 
 class Matrix internal constructor() {
     internal val rows = arrayListOf<DoubleArray>()
@@ -91,6 +92,37 @@ class Matrix internal constructor() {
         return S
     }
 
+    fun determinant(): Double {
+        assertSquare()
+
+        if (m == 1)
+            return this[0][0]
+
+        var det = 0.0
+        for (i in indices)
+            det += ((-1.0).pow(i)) * this[0][i] * minor(this, 0, i).determinant()
+
+        return det
+    }
+
+    internal fun minor(A: Matrix, _i: Int, _j: Int): Matrix  {
+        val S = Matrix(A.m - 1, A.n - 1)
+
+        var y = 0
+        var x = 0
+        for (i in A.indices) {
+            for (j in A.rows[i].indices)
+                if (_i != i && _j != j)
+                    S[x][y++] = A[i][j]
+            if (y == S.rows.size) {
+                x++
+                y = 0
+            }
+        }
+
+        return S
+    }
+
     infix fun orderEqual(other: Matrix) =
         this.m == other.m && this.n == other.n
 
@@ -117,6 +149,11 @@ class Matrix internal constructor() {
 
         if (elements.size != n)
             throw IllegalArgumentException("Invalid matrix")
+    }
+
+    private fun assertSquare() {
+        if (this.m != this.n)
+            throw IllegalStateException("Cannot find determinant of non-square matrix")
     }
 
     operator fun get(position: Int) = rows[position]

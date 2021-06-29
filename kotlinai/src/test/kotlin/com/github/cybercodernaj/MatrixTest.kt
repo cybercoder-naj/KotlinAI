@@ -214,4 +214,56 @@ class MatrixTest {
 
         assertTrue(B == requiredB)
     }
+
+    @Test
+    fun `determinant of 3 x 3 matrix`() {
+        val A = matrix {
+            row(1, 3, 2)
+            row(-3, -1, -3)
+            row(2, 3, 1)
+        }
+
+        val modA = det(A)
+
+        assertTrue(modA == -15.0)
+    }
+
+    @Test
+    fun `find minor of a matrix`() {
+        val A = matrix {
+            row(1, 3, 2)
+            row(-3, -1, -3)
+            row(2, 3, 1)
+        }
+
+        val minA = A.minor(A, 0, 0)
+
+        val requiredA = matrix {
+            row(-1, -3)
+            row(3, 1)
+        }
+
+        assertTrue(minA == requiredA)
+
+        val B = A.minor(A, 1, 1)
+
+        val requiredB = matrix {
+            row(1, 2)
+            row(2, 1)
+        }
+
+        assertTrue(B == requiredB)
+    }
+
+    @Test
+    fun `determinant of non square throws error`() {
+        val A = matrix {
+            row(1, 3, 2)
+            row(-3, -1, -3)
+        }
+
+        assertThrows<IllegalStateException> {
+            A.determinant()
+        }
+    }
 }

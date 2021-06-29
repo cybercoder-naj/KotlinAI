@@ -12,6 +12,8 @@ fun matrix(init: Matrix.() -> Unit): Matrix {
 
 fun transpose(A: Matrix) = A.transpose()
 
+fun det(A: Matrix) = A.determinant()
+
 operator fun Int.times(other: Matrix) = other * this
 
 operator fun Double.times(other: Matrix) = other * this
