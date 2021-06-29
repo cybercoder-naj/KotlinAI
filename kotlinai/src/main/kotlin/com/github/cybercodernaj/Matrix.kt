@@ -37,23 +37,6 @@ class Matrix internal constructor() {
         return row
     }
 
-    override operator fun equals(other: Any?): Boolean {
-        if (other !is Matrix)
-            return false
-
-        if (this.m != other.m || this.n != other.n)
-            return false
-
-        forEachElement { i, j ->
-            if (this[i][j] != other[i][j])
-                return false
-        }
-
-        return true
-    }
-
-    operator fun get(position: Int) = rows[position]
-
     operator fun plus(other: Matrix): Matrix {
         assertEqualOrder(other)
 
@@ -73,28 +56,6 @@ class Matrix internal constructor() {
         }
         return S
     }
-
-    private fun assertEqualOrder(other: Matrix) {
-        if (this orderNotEqual other)
-            throw IllegalArgumentException("Cannot add matrices of different order")
-    }
-
-    private fun assertRowConditions(elements: DoubleArray) {
-        if (elements.isEmpty())
-            throw IllegalArgumentException("Cannot add empty row")
-
-        if (n == -1)
-            n = elements.size
-
-        if (elements.size != n)
-            throw IllegalArgumentException("Invalid matrix")
-    }
-
-    infix fun orderEqual(other: Matrix) =
-        this.m == other.m && this.n == other.n
-
-    infix fun orderNotEqual(other: Matrix) =
-        !(this orderEqual other)
 
     operator fun times(other: Double): Matrix {
         val S = Matrix(m, n)
@@ -119,10 +80,49 @@ class Matrix internal constructor() {
         return S
     }
 
+    infix fun orderEqual(other: Matrix) =
+        this.m == other.m && this.n == other.n
+
+    infix fun orderNotEqual(other: Matrix) =
+        !(this orderEqual other)
+
     private inline fun forEachElement(block: (i: Int, j: Int) -> Unit) {
         for (i in indices)
             for (j in rows[i].indices)
                 block(i, j)
+    }
+
+    private fun assertEqualOrder(other: Matrix) {
+        if (this orderNotEqual other)
+            throw IllegalArgumentException("Cannot add matrices of different order")
+    }
+
+    private fun assertRowConditions(elements: DoubleArray) {
+        if (elements.isEmpty())
+            throw IllegalArgumentException("Cannot add empty row")
+
+        if (n == -1)
+            n = elements.size
+
+        if (elements.size != n)
+            throw IllegalArgumentException("Invalid matrix")
+    }
+
+    operator fun get(position: Int) = rows[position]
+
+    override operator fun equals(other: Any?): Boolean {
+        if (other !is Matrix)
+            return false
+
+        if (this.m != other.m || this.n != other.n)
+            return false
+
+        forEachElement { i, j ->
+            if (this[i][j] != other[i][j])
+                return false
+        }
+
+        return true
     }
 
     override fun toString(): String {
