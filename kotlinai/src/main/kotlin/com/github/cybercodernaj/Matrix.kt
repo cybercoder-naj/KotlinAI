@@ -14,7 +14,7 @@ class Matrix internal constructor() {
     private var n = -1
 
     private val indices: IntRange
-        get() = 0 until rows.size
+        get() = rows.indices
 
     companion object {
         fun I(size: Int): Matrix {
@@ -29,6 +29,9 @@ class Matrix internal constructor() {
     }
 
     private constructor(m: Int, n: Int) : this() {
+        if (m < 1 || n < 1)
+            throw IllegalArgumentException("Cannot have non-positive size of matrix")
+
         repeat(m) {
             rows.add(DoubleArray(n))
         }
@@ -168,7 +171,7 @@ class Matrix internal constructor() {
 
     private fun assertEqualOrder(other: Matrix) {
         if (this orderNotEqual other)
-            throw IllegalArgumentException("Cannot add matrices of different order")
+            throw IllegalArgumentException("Cannot perform operation on matrices of different order")
     }
 
     private fun assertRowConditions(elements: DoubleArray) {
@@ -184,7 +187,7 @@ class Matrix internal constructor() {
 
     private fun assertSquare() {
         if (this.m != this.n)
-            throw IllegalStateException("Cannot find determinant of non-square matrix")
+            throw IllegalStateException("Matrix must be a square matrix")
     }
 
     operator fun get(position: Int) = rows[position]
