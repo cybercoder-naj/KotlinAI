@@ -14,6 +14,8 @@ fun transpose(A: Matrix) = A.transpose()
 
 fun det(A: Matrix) = A.determinant()
 
+fun adj(A: Matrix) = A.adjoint()
+
 operator fun Int.times(other: Matrix) = other * this
 
 operator fun Double.times(other: Matrix) = other * this

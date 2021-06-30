@@ -4,6 +4,7 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
 
+@Suppress("LocalVariableName", "FunctionName")
 class Matrix internal constructor() {
     internal val rows = arrayListOf<DoubleArray>()
 
@@ -14,6 +15,18 @@ class Matrix internal constructor() {
 
     private val indices: IntRange
         get() = 0 until rows.size
+
+    companion object {
+        fun I(size: Int): Matrix {
+            val M = O(size)
+            M.forEachElement { i, j ->
+                M[i][j] = if (i == j) 1.0 else 0.0
+            }
+            return M
+        }
+
+        fun O(size: Int) = Matrix(size, size)
+    }
 
     private constructor(m: Int, n: Int) : this() {
         repeat(m) {
@@ -104,22 +117,22 @@ class Matrix internal constructor() {
 
         var det = 0.0
         for (i in indices)
-            det += ((-1.0).pow(i)) * this[0][i] * minor(this, 0, i).determinant()
+            det += ((-1.0).pow(i)) * this[0][i] * minor(0, i).determinant()
 
         return det
     }
 
     fun isSingular() = determinant() == 0.0
 
-    internal fun minor(A: Matrix, _i: Int, _j: Int): Matrix  {
-        val S = Matrix(A.m - 1, A.n - 1)
+    internal fun minor(_i: Int, _j: Int): Matrix  {
+        val S = Matrix(m - 1, n - 1)
 
         var y = 0
         var x = 0
-        for (i in A.indices) {
-            for (j in A.rows[i].indices)
+        for (i in indices) {
+            for (j in rows[i].indices)
                 if (_i != i && _j != j)
-                    S[x][y++] = A[i][j]
+                    S[x][y++] = this[i][j]
             if (y == S.rows.size) {
                 x++
                 y = 0
@@ -128,6 +141,18 @@ class Matrix internal constructor() {
 
         return S
     }
+
+    fun adjoint(): Matrix {
+        assertSquare()
+
+        val S = Matrix(m, n)
+        S.forEachElement { i, j ->
+            S[i][j] = ((-1.0).pow(i + j)) * minor(i, j).determinant()
+        }
+
+        return S.transpose()
+    }
+
 
     infix fun orderEqual(other: Matrix) =
         this.m == other.m && this.n == other.n

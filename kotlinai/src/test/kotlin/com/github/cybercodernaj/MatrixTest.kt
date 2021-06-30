@@ -1,11 +1,11 @@
 package com.github.cybercodernaj
 
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
 
 
+@Suppress("LocalVariableName")
 class MatrixTest {
 
     @Test
@@ -37,7 +37,8 @@ class MatrixTest {
             row(4, 5)
             row(0.3, -3.0)
         }
-        assertTrue(A == B)
+
+        assertEquals(A, B)
     }
 
     @Test
@@ -49,7 +50,7 @@ class MatrixTest {
             row(4, 5)
             row(0.3, -3.0)
         }
-        assertFalse(A == B)
+        assertNotEquals(A, B)
     }
 
     @Test
@@ -62,7 +63,7 @@ class MatrixTest {
             row(4, 5)
             row(0.3, -3.0)
         }
-        assertFalse(A == B)
+        assertNotEquals(A, B)
     }
 
     @Test
@@ -82,7 +83,7 @@ class MatrixTest {
             row(12, 0)
             row(3.3, -4.0)
         }
-        assertTrue(C == requiredC)
+        assertEquals(requiredC, C)
     }
 
     @Test
@@ -102,7 +103,7 @@ class MatrixTest {
             row(4, -10)
             row(2.7, 2.0)
         }
-        assertTrue(A == requiredA)
+        assertEquals(requiredA, A)
     }
 
     @Test
@@ -119,7 +120,7 @@ class MatrixTest {
             row(0.6, -6.0)
         }
 
-        assertTrue(B == requiredB)
+        assertEquals(requiredB, B)
     }
 
     @Test
@@ -159,7 +160,7 @@ class MatrixTest {
             row(16)
         }
 
-        assertTrue(B == requiredB)
+        assertEquals(requiredB, B)
 
         assertThrows<IllegalArgumentException> {
             X * A
@@ -179,7 +180,7 @@ class MatrixTest {
             row(4, -1)
         }
 
-        assertTrue(B == requiredB)
+        assertEquals(requiredB, B)
 
         val C = matrix {
             row(-2, 7)
@@ -193,7 +194,7 @@ class MatrixTest {
             row(7, -4)
         }
 
-        assertTrue(D == requiredD)
+        assertEquals(requiredD, D)
     }
 
     @Test
@@ -212,7 +213,7 @@ class MatrixTest {
             row(0, -1, 8)
         }
 
-        assertTrue(B == requiredB)
+        assertEquals(requiredB, B)
     }
 
     @Test
@@ -225,7 +226,7 @@ class MatrixTest {
 
         val modA = det(A)
 
-        assertTrue(modA == -15.0)
+        assertEquals(-15.0, modA)
     }
 
     @Test
@@ -236,23 +237,23 @@ class MatrixTest {
             row(2, 3, 1)
         }
 
-        val minA = A.minor(A, 0, 0)
+        val minA = A.minor(0, 0)
 
         val requiredA = matrix {
             row(-1, -3)
             row(3, 1)
         }
 
-        assertTrue(minA == requiredA)
+        assertEquals(requiredA, minA)
 
-        val B = A.minor(A, 1, 1)
+        val B = A.minor(1, 1)
 
         val requiredB = matrix {
             row(1, 2)
             row(2, 1)
         }
 
-        assertTrue(B == requiredB)
+        assertEquals(requiredB, B)
     }
 
     @Test
@@ -265,5 +266,96 @@ class MatrixTest {
         assertThrows<IllegalStateException> {
             A.determinant()
         }
+    }
+
+    @Test
+    fun `Zero Matrix of size 4`() {
+        val A = Matrix.O(4)
+
+        val B = matrix {
+            row(0, 0, 0, 0)
+            row(0, 0, 0, 0)
+            row(0, 0, 0, 0)
+            row(0, 0, 0, 0)
+        }
+
+        assertEquals(A, B)
+    }
+
+    @Test
+    fun `Identity matrix of size 3`() {
+        val A = Matrix.I(3)
+
+        val B = matrix {
+            row(1, 0, 0)
+            row(0, 1, 0)
+            row(0, 0, 1)
+        }
+
+        assertEquals(A, B)
+    }
+
+    @Test
+    fun `Adjoint of non-square matrix throws error`() {
+        val A = matrix {
+            row(1, 0, 4)
+            row(-2, 1, 0)
+        }
+
+        assertThrows<IllegalStateException> {
+            A.adjoint()
+        }
+    }
+
+    @Test
+    fun `finding adjoint of matrix`() {
+        val A = matrix {
+            row(8, -6, 2)
+            row(-6, 7, -4)
+            row(2, -4, 3)
+        }
+
+        val adjA = adj(A)
+
+        val requiredMatrix = matrix {
+            row(5, 10, 10)
+            row(10, 20, 20)
+            row(10, 20, 20)
+        }
+
+        assertEquals(requiredMatrix, adjA)
+    }
+
+    @Test
+    fun `symmetric matrix will return true`() {
+        val A = matrix {
+            row(1, 4, 2)
+            row(4, -1, 5)
+            row(2, 5, -3)
+        }
+
+        assertTrue(A.isSymmetric())
+    }
+
+    @Test
+    fun `skew symmetric matrix will return true`() {
+        val A = matrix {
+            row(0, 4, -2)
+            row(-4, 0, 3)
+            row(2, -3, 0)
+        }
+
+        assertTrue(A.isSkewSymmetric())
+    }
+
+    @Test
+    fun `singular matrix will return true`() {
+        val A = matrix {
+            row(3, 8, 1)
+            row(-4, 1, 1)
+            row(-4, 1, 1)
+        }
+
+        assertTrue(A.isSingular())
     }
 }
