@@ -16,6 +16,8 @@ fun det(A: Matrix) = A.determinant()
 
 fun adj(A: Matrix) = A.adjoint()
 
+fun inv(A: Matrix) = A.inverse()
+
 operator fun Int.times(other: Matrix) = other * this
 
 operator fun Double.times(other: Matrix) = other * this

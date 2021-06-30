@@ -3,6 +3,7 @@ package com.github.cybercodernaj
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.pow
+import kotlin.math.round
 
 @Suppress("LocalVariableName", "FunctionName")
 class Matrix internal constructor() {
@@ -80,7 +81,7 @@ class Matrix internal constructor() {
         val S = Matrix(m, n)
 
         forEachElement { i, j ->
-            S[i][j] = other * this[i][j]
+            S[i][j] = round(other * this[i][j] * 1000) / 1000.0
         }
         return S
     }
@@ -156,6 +157,12 @@ class Matrix internal constructor() {
         return S.transpose()
     }
 
+    fun inverse(): Matrix {
+        if (isSingular())
+            throw ArithmeticException("Cannot find inverse of singular matrix")
+
+        return (1 / determinant()) * adjoint()
+    }
 
     infix fun orderEqual(other: Matrix) =
         this.m == other.m && this.n == other.n

@@ -358,4 +358,21 @@ class MatrixTest {
 
         assertTrue(A.isSingular())
     }
+
+    @Test
+    fun `finding the inverse matrix`() {
+        val A = matrix {
+            row(4, 7)
+            row(2, 6)
+        }
+
+        val invA = inv(A)
+
+        val required = matrix {
+            row(0.6, -0.7)
+            row(-0.2, 0.4)
+        }
+
+        assertEquals(required, invA)
+    }
 }
