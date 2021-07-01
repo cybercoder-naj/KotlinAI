@@ -15,13 +15,13 @@ fun linearAlgebra() {
                 "If you buy 1 apple, 2 bananas and 4 carrots, it costs you ${'\u20B9'}24.\n\nThen\n"
     )
 
-    val A = matrix {
+    val A = matrix(2) {
         row(1, 1, 1)
         row(2, 3, 2)
         row(1, 2, 4)
     }
 
-    val B = matrix {
+    val B = matrix(2) {
         row(9)
         row(21)
         row(24)

@@ -21,6 +21,9 @@ class Matrix internal constructor(precision: Int) {
         get() = 10.0.pow(field)
 
     init {
+        if (precision < 0)
+            throw IllegalArgumentException("Cannot have negative precision")
+
         this.precision = precision.toDouble()
     }
 
@@ -36,7 +39,7 @@ class Matrix internal constructor(precision: Int) {
         fun O(size: Int) = Matrix(size, size)
     }
 
-    private constructor(m: Int, n: Int) : this() {
+    private constructor(m: Int, n: Int, precision: Int = 2) : this(precision) {
         if (m < 1 || n < 1)
             throw IllegalArgumentException("Cannot have non-positive size of matrix")
 
