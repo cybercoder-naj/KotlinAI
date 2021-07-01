@@ -1,18 +1,15 @@
 package com.github.cybercodernaj
 
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.pow
-import kotlin.math.round
+import kotlin.math.*
 
 @Suppress("LocalVariableName", "FunctionName")
 class Matrix internal constructor(precision: Int) {
     internal val rows = arrayListOf<DoubleArray>()
 
-    private val m: Int
+    internal val m: Int
         get() = rows.size
 
-    private var n = -1
+    internal var n = -1
 
     private val indices: IntRange
         get() = rows.indices

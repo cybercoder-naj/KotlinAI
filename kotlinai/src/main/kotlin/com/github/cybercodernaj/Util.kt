@@ -10,6 +10,20 @@ fun matrix(precision: Int = 2, init: Matrix.() -> Unit): Matrix {
     return matrix
 }
 
+fun vector(vararg elements: Double): Vector {
+	val vector = Vector(elements)
+
+	return vector
+}
+
+fun vector(vararg elements: Int): Vector {
+	val vector = Vector(
+		elements.map { it.toDouble }.toDoubleArray()
+	)
+
+	return vector
+}
+
 fun transpose(A: Matrix) = A.transpose()
 
 fun det(A: Matrix) = A.determinant()
