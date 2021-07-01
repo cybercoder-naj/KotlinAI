@@ -1,7 +1,5 @@
 @file:Suppress("LocalVariableName")
 
-package com.github.cybercodernaj
-
 import kotlin.math.round
 
 fun main() {
