@@ -374,5 +374,6 @@ class MatrixTest {
         }
 
         assertEquals(required, invA)
+        assertEquals(A * invA, Matrix.I(2))
     }
 }

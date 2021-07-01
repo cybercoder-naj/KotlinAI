@@ -95,7 +95,7 @@ class Matrix internal constructor() {
         val S = Matrix(this.m, other.n)
         S.forEachElement { i, j ->
             for (k in 0 until n)
-                S[i][j] += this[i][k] * other[k][j]
+                S[i][j] += round(this[i][k] * other[k][j] * 100) / 100.0
         }
         return S
     }
