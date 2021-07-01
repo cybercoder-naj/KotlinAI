@@ -6,7 +6,7 @@ import kotlin.math.pow
 import kotlin.math.round
 
 @Suppress("LocalVariableName", "FunctionName")
-class Matrix internal constructor() {
+class Matrix internal constructor(precision: Int) {
     internal val rows = arrayListOf<DoubleArray>()
 
     private val m: Int
@@ -16,6 +16,13 @@ class Matrix internal constructor() {
 
     private val indices: IntRange
         get() = rows.indices
+
+    private val precision: Double
+        get() = 10.0.pow(field)
+
+    init {
+        this.precision = precision.toDouble()
+    }
 
     companion object {
         fun I(size: Int): Matrix {
@@ -81,7 +88,7 @@ class Matrix internal constructor() {
         val S = Matrix(m, n)
 
         forEachElement { i, j ->
-            S[i][j] = round(other * this[i][j] * 100) / 100.0
+            S[i][j] = round(other * this[i][j] * precision) / precision
         }
         return S
     }
@@ -95,7 +102,7 @@ class Matrix internal constructor() {
         val S = Matrix(this.m, other.n)
         S.forEachElement { i, j ->
             for (k in 0 until n)
-                S[i][j] += round(this[i][k] * other[k][j] * 100) / 100.0
+                S[i][j] += round(this[i][k] * other[k][j] * precision) / precision
         }
         return S
     }

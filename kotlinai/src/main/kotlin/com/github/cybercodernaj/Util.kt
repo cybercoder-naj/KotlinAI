@@ -1,7 +1,7 @@
 package com.github.cybercodernaj
 
-fun matrix(init: Matrix.() -> Unit): Matrix {
-    val matrix = Matrix()
+fun matrix(precision: Int = 2, init: Matrix.() -> Unit): Matrix {
+    val matrix = Matrix(precision)
     matrix.init()
 
     if (matrix.rows.isEmpty())
