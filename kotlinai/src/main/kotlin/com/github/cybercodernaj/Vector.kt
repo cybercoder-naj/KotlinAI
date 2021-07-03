@@ -1,4 +1,6 @@
-class Vector() internal constructor(array: DoubleArray){
+package com.github.cybercodernaj
+
+class Vector internal constructor(array: DoubleArray){
 	internal val matrix: Matrix
 
 	private val size: Int
@@ -9,9 +11,9 @@ class Vector() internal constructor(array: DoubleArray){
 			throw IllegalArgumentException("Array cannot be empty")
 
 		matrix = matrix {
-			array.forEach(e -> {
+			array.forEach {e ->
 				row(e)
-			})
+			}
 		}
 	}
 

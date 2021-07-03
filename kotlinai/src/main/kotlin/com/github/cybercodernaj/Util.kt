@@ -18,7 +18,7 @@ fun vector(vararg elements: Double): Vector {
 
 fun vector(vararg elements: Int): Vector {
 	val vector = Vector(
-		elements.map { it.toDouble }.toDoubleArray()
+		elements.map { it.toDouble() }.toDoubleArray()
 	)
 
 	return vector
