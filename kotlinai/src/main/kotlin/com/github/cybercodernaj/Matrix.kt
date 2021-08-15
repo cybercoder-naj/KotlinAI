@@ -17,23 +17,26 @@ class Matrix internal constructor(precision: Int) {
     private val precision: Double
         get() = 10.0.pow(field)
 
+    private val _precision: Int
+
     init {
         if (precision < 0)
             throw IllegalArgumentException("Cannot have negative precision")
 
         this.precision = precision.toDouble()
+        this._precision = precision
     }
 
     companion object {
-        fun I(size: Int): Matrix {
-            val M = O(size)
+        fun I(size: Int, precision: Int = 2): Matrix {
+            val M = O(size, precision)
             M.forEachElement { i, j ->
                 M[i][j] = if (i == j) 1.0 else 0.0
             }
             return M
         }
 
-        fun O(size: Int) = Matrix(size, size)
+        fun O(size: Int, precision: Int = 2) = Matrix(size, size, precision)
     }
 
     private constructor(m: Int, n: Int, precision: Int = 2) : this(precision) {
@@ -65,7 +68,7 @@ class Matrix internal constructor(precision: Int) {
     operator fun plus(other: Matrix): Matrix {
         assertEqualOrder(other)
 
-        val S = Matrix(m, n)
+        val S = Matrix(m, n, max(_precision, other._precision))
         forEachElement { i, j ->
             S[i][j] = this[i][j] + other[i][j]
         }
@@ -75,7 +78,7 @@ class Matrix internal constructor(precision: Int) {
     operator fun minus(other: Matrix): Matrix {
         assertEqualOrder(other)
 
-        val S = Matrix(m, n)
+        val S = Matrix(m, n, max(_precision, other._precision))
         forEachElement { i, j ->
             S[i][j] = this[i][j] - other[i][j]
         }
@@ -85,7 +88,7 @@ class Matrix internal constructor(precision: Int) {
     operator fun unaryMinus() = -1 * this
 
     operator fun times(other: Double): Matrix {
-        val S = Matrix(m, n)
+        val S = Matrix(m, n, _precision)
 
         forEachElement { i, j ->
             S[i][j] = round(other * this[i][j] * precision) / precision
@@ -99,7 +102,7 @@ class Matrix internal constructor(precision: Int) {
         if (this.n != other.m)
             throw IllegalArgumentException("Cannot multiply matrices of incompatible order")
 
-        val S = Matrix(this.m, other.n)
+        val S = Matrix(this.m, other.n, max(_precision, other._precision))
         S.forEachElement { i, j ->
             for (k in 0 until n)
                 S[i][j] += round(this[i][k] * other[k][j] * precision) / precision
@@ -108,7 +111,7 @@ class Matrix internal constructor(precision: Int) {
     }
 
     fun transpose(): Matrix {
-        val S = Matrix(n, m)
+        val S = Matrix(n, m, _precision)
 
         forEachElement { i, j ->
             S[j][i] = this[i][j]
@@ -136,7 +139,7 @@ class Matrix internal constructor(precision: Int) {
     fun isSingular() = determinant() == 0.0
 
     internal fun minor(_i: Int, _j: Int): Matrix  {
-        val S = Matrix(m - 1, n - 1)
+        val S = Matrix(m - 1, n - 1, _precision)
 
         var y = 0
         var x = 0
@@ -156,7 +159,7 @@ class Matrix internal constructor(precision: Int) {
     fun adjoint(): Matrix {
         assertSquare()
 
-        val S = Matrix(m, n)
+        val S = Matrix(m, n, _precision)
         S.forEachElement { i, j ->
             S[i][j] = ((-1.0).pow(i + j)) * minor(i, j).determinant()
         }
